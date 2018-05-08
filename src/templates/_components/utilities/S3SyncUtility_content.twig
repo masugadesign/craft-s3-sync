@@ -1,0 +1,24 @@
+{# @var craft \craft\web\twig\variables\CraftVariable #}
+{#
+/**
+ * S3 Sync plugin for Craft CMS
+ *
+ * S3SyncUtility Utility Content
+ *
+ * @author    Superbig
+ * @copyright Copyright (c) 2018 Superbig
+ * @link      https://superbig.co
+ * @package   S3Sync
+ * @since     1.0.0
+ */
+#}
+
+<h1>S3SyncUtility</h1>
+
+{% set iconUrl = view.getAssetManager().getPublishedUrl('@superbig/s3sync/assetbundles/s3syncutilityutility/dist', true) ~ '/img/S3SyncUtility-icon.svg' %}
+
+<img src="{{ iconUrl }}" height="64" width="64" />
+
+<p>Your Utility content goes here</p>
+
+<p>{{ someVar }}</p>

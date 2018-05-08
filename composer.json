@@ -1,0 +1,43 @@
+{
+    "name": "superbig/craft-s3-sync",
+    "description": "Create Assets in Craft when a file is uploaded directly to S3",
+    "type": "craft-plugin",
+    "version": "1.0.0",
+    "keywords": [
+        "craft",
+        "cms",
+        "craftcms",
+        "craft-plugin",
+        "s3 sync"
+    ],
+    "support": {
+        "docs": "https://github.com/superbigco/craft-s3-sync/blob/master/README.md",
+        "issues": "https://github.com/superbigco/craft-s3-sync/issues"
+    },
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Superbig",
+            "homepage": "https://superbig.co"
+        }
+    ],
+    "require": {
+        "craftcms/cms": "^3.0.0"
+    },
+    "autoload": {
+        "psr-4": {
+          "superbig\\s3sync\\": "src/"
+        }
+    },
+    "extra": {
+        "name": "S3 Sync",
+        "handle": "s3-sync",
+        "hasCpSettings": false,
+        "hasCpSection": false,
+        "changelogUrl": "https://raw.githubusercontent.com/superbigco/craft-s3-sync/master/CHANGELOG.md",
+        "components": {
+            "s3SyncService": "superbig\\s3sync\\services\\S3SyncService"
+        },
+        "class": "superbig\\s3sync\\S3Sync"
+    }
+}

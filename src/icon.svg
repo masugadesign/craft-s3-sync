@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="512px" height="512px" viewBox="0 0 512 512" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 49.3 (51167) - http://www.bohemiancoding.com/sketch -->
+    <title>icon</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="icon" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g>
+            <circle id="Oval-Copy" fill="#F68C12" cx="256" cy="256" r="256"></circle>
+            <g id="sync" transform="translate(100.000000, 117.000000)" fill="#FFFFFF" fill-rule="nonzero">
+                <path d="M93.375,76.44 L189.8625,76.44 L166.51875,99.84 L188.30625,121.68 L249,60.84 L188.30625,0 L166.51875,21.84 L189.8625,45.24 L93.375,45.24 C42.01875,45.24 0,87.36 0,138.84 C0,159.12 6.225,179.4 18.675,195 L43.575,176.28 C35.79375,165.36 31.125,152.88 31.125,138.84 C31.125,104.52 59.1375,76.44 93.375,76.44 Z" id="Shape"></path>
+                <path d="M293.325,82 L268.425,100.666667 C276.20625,111.555556 280.875,124 280.875,138 C280.875,172.222222 252.8625,200.222222 218.625,200.222222 L122.1375,200.222222 L145.48125,176.888889 L123.69375,155.111111 L63,215.777778 L123.69375,278 L145.48125,256.222222 L122.1375,231.333333 L218.625,231.333333 C269.98125,231.333333 312,189.333333 312,138 C312,117.777778 305.775,97.5555556 293.325,82 Z" id="Shape"></path>
+            </g>
+        </g>
+    </g>
+</svg>
