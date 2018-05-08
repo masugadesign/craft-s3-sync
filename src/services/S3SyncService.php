@@ -12,12 +12,14 @@ namespace superbig\s3sync\services;
 
 use craft\base\FlysystemVolume;
 use craft\elements\Asset;
+use craft\errors\AssetDisallowedExtensionException;
 use superbig\s3sync\models\S3SyncModel;
 use superbig\s3sync\records\S3SyncRecord;
 use superbig\s3sync\S3Sync;
 
 use Craft;
 use craft\base\Component;
+use craft\helpers\Assets as AssetsHelper;
 
 /**
  * @author    Superbig
@@ -31,12 +33,39 @@ class S3SyncService extends Component
 
     public function process($events = [])
     {
-        try {
-            array_map(function($event) {
-                $model = S3SyncModel::create($event);
+        $events = array_filter($events, function($event) {
+            return $event['eventName'] === S3SyncModel::EVENT_CREATED_PUT;
+        });
 
-                $this->processEvent($model);
-            }, $events);
+        array_map(function($event) {
+            $model = S3SyncModel::create($event);
+
+            $this->processEvent($model);
+        }, $events);
+
+        return true;
+    }
+
+    public function processEvent(S3SyncModel $model)
+    {
+        $assets   = Craft::$app->getAssets();
+        $filename = $model->getFilename();
+        $volume   = $this->getMatchingVolume($model->getBucketName());
+
+        if (!$volume) {
+            return false;
+        }
+
+        try {
+            $asset                 = Craft::$app->getAssetIndexer()->indexFile($volume, $model->getObjectKey());
+            $model->volumeFolderId = $asset->getFolder()->id;
+            $model->volumeId       = $volume->id;
+
+            $this->_saveRecord($model);
+        } catch (AssetDisallowedExtensionException $e) {
+            echo $e->getMessage();
+
+            return false;
         } catch (\Exception $e) {
             echo $e->getMessage();
 
@@ -44,49 +73,6 @@ class S3SyncService extends Component
         }
 
         return true;
-    }
-
-    public function processEvent(S3SyncModel $model)
-    {
-        $assets         = Craft::$app->getAssets();
-        $matchingVolume = $this->getMatchingVolume($model->getBucketName());
-
-        if (!$matchingVolume) {
-            return false;
-        }
-
-        $folders = $model->getFolderNames();
-
-        if (!$folders) {
-            $targetFolder = $assets->getRootFolderByVolumeId($matchingVolume->id);
-        }
-        else {
-            $targetFolder = $assets->ensureFolderByFullPathAndVolume($model->getPath(), $matchingVolume);
-        }
-
-        // Check if there is an Asset already
-        $asset = $this->getExistingAsset($model);
-
-        if (!$asset) {
-            $asset               = new Asset();
-            $asset->tempFilePath = $tempPath;
-            $asset->filename     = $file['filename'];
-            $asset->newFolderId  = $targetFolder->id;
-            $asset->volumeId     = $folder->volumeId;
-            $asset->setScenario(Asset::SCENARIO_CREATE);
-            $asset->avoidFilenameConflicts = true;
-
-            Craft::$app->getElements()->saveElement($asset);
-        }
-
-
-        echo $model->getFilename() . PHP_EOL;
-        echo print_r($model->getFolderNames(), true) . PHP_EOL;
-    }
-
-    public function getExistingAsset(S3SyncModel $model)
-    {
-
     }
 
     /*
