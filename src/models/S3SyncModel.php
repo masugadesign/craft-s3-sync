@@ -10,6 +10,8 @@
 
 namespace superbig\s3sync\models;
 
+use craft\base\Volume;
+use superbig\s3sync\records\S3SyncRecord;
 use superbig\s3sync\S3Sync;
 
 use Craft;
@@ -22,8 +24,16 @@ use craft\base\Model;
  */
 class S3SyncModel extends Model
 {
+    const EVENT_CREATED     = 'ObjectCreated:*';
+    const EVENT_CREATED_PUT = 'ObjectCreated:Put';
+
     // Public Properties
     // =========================================================================
+
+    /**
+     * @var int
+     */
+    public $id;
 
     /**
      * @var int
@@ -31,9 +41,29 @@ class S3SyncModel extends Model
     public $volumeId;
 
     /**
+     * @var int
+     */
+    public $siteId;
+
+    /**
+     * @var int
+     */
+    public $volumeFolderId;
+
+    /**
      * @var array
      */
     public $data = [];
+
+    /**
+     * @var Volume|null
+     */
+    public $volume;
+
+    /**
+     * @var \DateTime
+     */
+    public $dateCreated;
 
     // Public Methods
     // =========================================================================
@@ -47,6 +77,28 @@ class S3SyncModel extends Model
         return $model;
     }
 
+    public static function createFromRecord(S3SyncRecord $record)
+    {
+        $model                 = new self();
+        $model->volumeId       = $record->volumeId;
+        $model->volumeFolderId = $record->volumeFolderId;
+        $model->data           = unserialize($record->data);
+        $model->volume         = $record->volume;
+        $model->dateCreated    = $record->dateCreated;
+
+        return $model;
+    }
+
+    public function getVolume()
+    {
+        return $this->volume;
+    }
+
+    public function getFolderId()
+    {
+        return $this->volumeFolderId;
+    }
+
     public function getEventName()
     {
         return $this->data['eventName'] ?? null;
@@ -55,6 +107,16 @@ class S3SyncModel extends Model
     public function getBucketName()
     {
         return $this->data['s3']['bucket']['name'] ?? null;
+    }
+
+    public function getSize()
+    {
+        return $this->data['s3']['object']['size'] ?? null;
+    }
+
+    public function getDate()
+    {
+        return $this->data['eventTime'] ?? null;
     }
 
     public function getFilename()

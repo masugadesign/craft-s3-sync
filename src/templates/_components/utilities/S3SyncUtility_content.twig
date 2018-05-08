@@ -13,12 +13,30 @@
  */
 #}
 
-<h1>S3SyncUtility</h1>
+<h1>S3 Sync Log</h1>
 
-{% set iconUrl = view.getAssetManager().getPublishedUrl('@superbig/s3sync/assetbundles/s3syncutilityutility/dist', true) ~ '/img/S3SyncUtility-icon.svg' %}
-
-<img src="{{ iconUrl }}" height="64" width="64" />
-
-<p>Your Utility content goes here</p>
-
-<p>{{ someVar }}</p>
+{% if logs %}
+    <table class="table data fullwidth">
+        <thead>
+        <tr>
+            <th>Path</th>
+            <th>Bucket name</th>
+            <th>Volume</th>
+            <th>Date</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for event in logs %}
+            {% set volume = event.getVolume() %}
+            <tr>
+                <td>{{event.getObjectKey() }}</td>
+                <td>{{event.getBucketName() }}</td>
+                <td scope="row" data-title="{{ 'Volume Name'|t('app') }}"><a href="{{ url('settings/assets/volumes/' ~ volume.id) }}">{{ volume.name|t('site') }}</a></td>
+                <td>{{event.dateCreated }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% else %}
+    <p>No recorded events.</p>
+{% endif %}

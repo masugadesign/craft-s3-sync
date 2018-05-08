@@ -33,7 +33,7 @@ class S3SyncUtility extends Utility
      */
     public static function displayName(): string
     {
-        return Craft::t('s3-sync', 'S3SyncUtility');
+        return Craft::t('s3-sync', 'S3 Sync Log');
     }
 
     /**
@@ -67,11 +67,12 @@ class S3SyncUtility extends Utility
     {
         Craft::$app->getView()->registerAssetBundle(S3SyncUtilityUtilityAsset::class);
 
-        $someVar = 'Have a nice day!';
+        $logs = S3Sync::$plugin->s3SyncService->getLogs();
+
         return Craft::$app->getView()->renderTemplate(
             's3-sync/_components/utilities/S3SyncUtility_content',
             [
-                'someVar' => $someVar
+                'logs' => $logs,
             ]
         );
     }

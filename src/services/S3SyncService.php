@@ -105,7 +105,24 @@ class S3SyncService extends Component
         return end($volumes) ?? null;
     }
 
-    public function _saveRecord(S3SyncModel &$model)
+    public function getLogs()
+    {
+        $records = S3SyncRecord::find()
+                               ->with(['volume'])
+                               ->orderBy('dateCreated DESC')
+                               ->all();
+
+        if (!$records) {
+            return null;
+        }
+
+        // Delete older than 30 days
+        return array_map(function($record) {
+            return S3SyncModel::createFromRecord($record);
+        }, $records);
+    }
+
+    private function _saveRecord(S3SyncModel &$model)
     {
         try {
             if ($model->id) {
@@ -115,9 +132,10 @@ class S3SyncService extends Component
                 $record = new S3SyncRecord();
             }
 
-            $record->volumeId = $model->volumeId;
-            $record->siteId   = $model->siteId;
-            $record->data     = serialize($model->data);
+            $record->volumeId       = $model->volumeId;
+            $record->volumeFolderId = $model->volumeFolderId;
+            $record->siteId         = Craft::$app->getSites()->getPrimarySite()->id;
+            $record->data           = serialize($model->data);
 
             if (!$record->save()) {
                 Craft::error(

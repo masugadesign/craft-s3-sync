@@ -83,13 +83,14 @@ class Install extends Migration
             $this->createTable(
                 $this->_tableName,
                 [
-                    'id'          => $this->primaryKey(),
-                    'dateCreated' => $this->dateTime()->notNull(),
-                    'dateUpdated' => $this->dateTime()->notNull(),
-                    'uid'         => $this->uid(),
-                    'siteId'      => $this->integer()->notNull(),
-                    'volumeId'      => $this->integer()->notNull(),
-                    'data'        => $this->text()->null()->defaultValue(null),
+                    'id'             => $this->primaryKey(),
+                    'dateCreated'    => $this->dateTime()->notNull(),
+                    'dateUpdated'    => $this->dateTime()->notNull(),
+                    'uid'            => $this->uid(),
+                    'siteId'         => $this->integer()->notNull(),
+                    'volumeId'       => $this->integer()->notNull(),
+                    'volumeFolderId' => $this->integer()->notNull(),
+                    'data'           => $this->text()->null()->defaultValue(null),
                 ]
             );
         }
@@ -106,12 +107,13 @@ class Install extends Migration
             $this->db->getIndexName(
                 $this->_tableName,
                 'volumeId',
-                true
+                false
             ),
             $this->_tableName,
             'volumeId',
-            true
+            false
         );
+
         // Additional commands depending on the db driver
         switch ($this->driver) {
             case DbConfig::DRIVER_MYSQL:
@@ -141,6 +143,16 @@ class Install extends Migration
             $this->_tableName,
             'volumeId',
             '{{%volumes}}',
+            'id',
+            'CASCADE',
+            'CASCADE'
+        );
+
+        $this->addForeignKey(
+            $this->db->getForeignKeyName($this->_tableName, 'volumeFolderId'),
+            $this->_tableName,
+            'volumeFolderId',
+            '{{%volumefolders}}',
             'id',
             'CASCADE',
             'CASCADE'
