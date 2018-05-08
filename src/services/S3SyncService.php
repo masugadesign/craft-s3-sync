@@ -13,6 +13,8 @@ namespace superbig\s3sync\services;
 use craft\base\FlysystemVolume;
 use craft\elements\Asset;
 use craft\errors\AssetDisallowedExtensionException;
+use GuzzleHttp\Client;
+use GuzzleHttp\Exception\RequestException;
 use superbig\s3sync\models\S3SyncModel;
 use superbig\s3sync\records\S3SyncRecord;
 use superbig\s3sync\S3Sync;
@@ -42,6 +44,31 @@ class S3SyncService extends Component
 
             $this->processEvent($model);
         }, $events);
+
+        return true;
+    }
+
+    public function confirmSubscription($body = [])
+    {
+        $url = $body['SubscribeURL'];
+
+        try {
+            $client = new Client();
+            $client->get($url);
+
+        } catch (RequestException $e) {
+
+            Craft::error(
+                Craft::t(
+                    's3-sync',
+                    'Failed to confirm url: {error}',
+                    [
+                        'error' => $e->getMessage(),
+                    ]
+                ), __METHOD__);
+
+            return false;
+        }
 
         return true;
     }

@@ -14,6 +14,7 @@ use superbig\s3sync\S3Sync;
 
 use Craft;
 use craft\web\Controller;
+use yii\web\HttpException;
 use yii\web\JsonParser;
 
 /**
@@ -47,9 +48,20 @@ class DefaultController extends Controller
         $this->enableCsrfValidation = false;
         $parser                     = new JsonParser();
         $body                       = $parser->parse(Craft::$app->getRequest()->getRawBody(), 'application/json');
+        $request                    = Craft::$app->getRequest();
+
+        if ($type = $request->getHeaders()->get('x-amz-sns-message-type')) {
+            if (in_array($type, ['SubscriptionConfirmation', 'UnsubscribeConfirmation'])) {
+                return $this->asJson([
+                    'success' => S3Sync::$plugin->s3SyncService->confirmSubscription($body),
+                ]);
+            }
+        }
+
+        $body = $parser->parse($body['Message'], 'application/json');
 
         if (empty($body['Records'])) {
-            throw new \HttpException(400);
+            throw new HttpException(400);
         }
 
         return $this->asJson([

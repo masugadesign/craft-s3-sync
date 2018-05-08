@@ -14,5 +14,6 @@
  * @since     1.0.0
  */
 return [
-    'S3 Sync plugin loaded' => 'S3 Sync plugin loaded',
+    'S3 Sync plugin loaded'          => 'S3 Sync plugin loaded',
+    'Failed to confirm url: {error}' => 'Failed to confirm url: {error}',
 ];
