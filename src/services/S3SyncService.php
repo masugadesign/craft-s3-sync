@@ -103,10 +103,17 @@ class S3SyncService extends Component
         }
 
         try {
-            $asset                 = Craft::$app->getAssetIndexer()->indexFile($volume, $model->getObjectKey());
+            $path = $model->getObjectKey();
+
+            if (!empty($volume->getSettings()['subfolder'])) {
+                $subfolder = rtrim($volume->getSettings()['subfolder'], '/');
+                $path      = str_replace($subfolder . '/', '', $path);
+            }
+
+            $asset                 = Craft::$app->getAssetIndexer()->indexFile($volume, $path);
             $model->volumeFolderId = $asset->getFolder()->id;
             $model->volumeId       = $volume->id;
-            $model->setMessage('Created {path}', ['path' => $model->getObjectKey()]);
+            $model->setMessage('Created {path}', ['path' => $path]);
 
             $this->_saveRecord($model);
         } catch (AssetDisallowedExtensionException $e) {
