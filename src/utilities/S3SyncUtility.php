@@ -4,14 +4,14 @@
  *
  * Create Assets in Craft when a file is uploaded directly to S3
  *
- * @link      https://superbig.co
- * @copyright Copyright (c) 2018 Superbig
+ * @link      https://gomasuga.com
+ * @copyright Copyright (c) 2018 Masuga Design
  */
 
-namespace superbig\s3sync\utilities;
+namespace masugadesign\s3sync\utilities;
 
-use superbig\s3sync\S3Sync;
-use superbig\s3sync\assetbundles\s3syncutilityutility\S3SyncUtilityUtilityAsset;
+use masugadesign\s3sync\S3Sync;
+use masugadesign\s3sync\assetbundles\s3syncutilityutility\S3SyncUtilityUtilityAsset;
 
 use Craft;
 use craft\base\Utility;
@@ -19,7 +19,7 @@ use craft\base\Utility;
 /**
  * S3 Sync Utility
  *
- * @author    Superbig
+ * @author    Masuga Design
  * @package   S3Sync
  * @since     1.0.0
  */
@@ -49,7 +49,7 @@ class S3SyncUtility extends Utility
      */
     public static function iconPath()
     {
-        return Craft::getAlias("@superbig/s3sync/assetbundles/s3syncutilityutility/dist/img/S3SyncUtility-icon.svg");
+        return Craft::getAlias("@masugadesign/s3sync/assetbundles/s3syncutilityutility/dist/img/S3SyncUtility-icon.svg");
     }
 
     /**

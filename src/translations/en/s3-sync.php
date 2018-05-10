@@ -4,12 +4,12 @@
  *
  * Create Assets in Craft when a file is uploaded directly to S3
  *
- * @link      https://superbig.co
- * @copyright Copyright (c) 2018 Superbig
+ * @link      https://gomasuga.com
+ * @copyright Copyright (c) 2018 Masuga Design
  */
 
 /**
- * @author    Superbig
+ * @author    Masuga Design
  * @package   S3Sync
  * @since     1.0.0
  */

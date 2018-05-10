@@ -3,9 +3,9 @@
  *
  * S3SyncUtility Utility JS
  *
- * @author    Superbig
- * @copyright Copyright (c) 2018 Superbig
- * @link      https://superbig.co
+ * @author    Masuga Design
+ * @copyright Copyright (c) 2018 Masuga Design
+ * @link      https://gomasuga.com
  * @package   S3Sync
  * @since     1.0.0
  */

@@ -4,14 +4,14 @@
  *
  * Create Assets in Craft when a file is uploaded directly to S3
  *
- * @link      https://superbig.co
- * @copyright Copyright (c) 2018 Superbig
+ * @link      https://gomasuga.com
+ * @copyright Copyright (c) 2018 Masuga Design
  */
 
-namespace superbig\s3sync;
+namespace masugadesign\s3sync;
 
-use superbig\s3sync\services\S3SyncService as S3SyncServiceService;
-use superbig\s3sync\utilities\S3SyncUtility as S3SyncUtilityUtility;
+use masugadesign\s3sync\services\S3SyncService as S3SyncServiceService;
+use masugadesign\s3sync\utilities\S3SyncUtility as S3SyncUtilityUtility;
 
 use Craft;
 use craft\base\Plugin;
@@ -27,7 +27,7 @@ use yii\base\Event;
 /**
  * Class S3Sync
  *
- * @author    Superbig
+ * @author    Masuga Design
  * @package   S3Sync
  * @since     1.0.0
  *

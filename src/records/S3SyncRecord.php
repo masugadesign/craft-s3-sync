@@ -4,20 +4,20 @@
  *
  * Create Assets in Craft when a file is uploaded directly to S3
  *
- * @link      https://superbig.co
- * @copyright Copyright (c) 2018 Superbig
+ * @link      https://gomasuga.com
+ * @copyright Copyright (c) 2018 Masuga Design
  */
 
-namespace superbig\s3sync\records;
+namespace masugadesign\s3sync\records;
 
 use craft\records\Volume;
-use superbig\s3sync\S3Sync;
+use masugadesign\s3sync\S3Sync;
 
 use Craft;
 use craft\db\ActiveRecord;
 
 /**
- * @author    Superbig
+ * @author    Masuga Design
  * @package   S3Sync
  * @since     1.0.0
  *

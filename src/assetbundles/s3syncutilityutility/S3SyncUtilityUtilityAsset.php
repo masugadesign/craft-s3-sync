@@ -4,18 +4,18 @@
  *
  * Create Assets in Craft when a file is uploaded directly to S3
  *
- * @link      https://superbig.co
- * @copyright Copyright (c) 2018 Superbig
+ * @link      https://gomasuga.com
+ * @copyright Copyright (c) 2018 Masuga Design
  */
 
-namespace superbig\s3sync\assetbundles\s3syncutilityutility;
+namespace masugadesign\s3sync\assetbundles\s3syncutilityutility;
 
 use Craft;
 use craft\web\AssetBundle;
 use craft\web\assets\cp\CpAsset;
 
 /**
- * @author    Superbig
+ * @author    Masuga Design
  * @package   S3Sync
  * @since     1.0.0
  */
@@ -29,7 +29,7 @@ class S3SyncUtilityUtilityAsset extends AssetBundle
      */
     public function init()
     {
-        $this->sourcePath = "@superbig/s3sync/assetbundles/s3syncutilityutility/dist";
+        $this->sourcePath = "@masugadesign/s3sync/assetbundles/s3syncutilityutility/dist";
 
         $this->depends = [
             CpAsset::class,
