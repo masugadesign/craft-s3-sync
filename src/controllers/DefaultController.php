@@ -50,8 +50,6 @@ class DefaultController extends Controller
         $parser                     = new JsonParser();
         $body                       = $parser->parse($request->getRawBody(), 'application/json');
 
-        Craft::info('S3 SNS payload: ' . $request->getRawBody(), __METHOD__);
-
         if ($type = $request->getHeaders()->get('x-amz-sns-message-type')) {
             if (in_array($type, ['SubscriptionConfirmation'])) {
                 return $this->asJson([
