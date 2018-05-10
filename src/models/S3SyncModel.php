@@ -11,6 +11,7 @@
 namespace superbig\s3sync\models;
 
 use craft\base\Volume;
+use craft\helpers\Template;
 use superbig\s3sync\records\S3SyncRecord;
 use superbig\s3sync\S3Sync;
 
@@ -24,8 +25,18 @@ use craft\base\Model;
  */
 class S3SyncModel extends Model
 {
-    const EVENT_CREATED     = 'ObjectCreated:*';
-    const EVENT_CREATED_PUT = 'ObjectCreated:Put';
+    const STATUS_SUCCESS     = 'success';
+    const STATUS_ERROR       = 'error';
+    const EVENT_CREATED      = 'ObjectCreated:*';
+    const EVENT_CREATED_PUT  = 'ObjectCreated:Put';
+    const EVENT_CONFIRMATION = 'confirmation';
+    const EVENT_CREATE_ASSET = 'create-asset';
+    const EVENT_NOTIFICATION = 'notification';
+    const EVENTS             = [
+        'confirmation' => 'Subscription Confirmation',
+        'create-asset' => 'Created asset',
+        'notification' => 'Notification',
+    ];
 
     // Public Properties
     // =========================================================================
@@ -65,6 +76,21 @@ class S3SyncModel extends Model
      */
     public $dateCreated;
 
+    /**
+     * @var string
+     */
+    public $status = 'success';
+
+    /**
+     * @var string
+     */
+    public $event;
+
+    /**
+     * @var string
+     */
+    public $message;
+
     // Public Methods
     // =========================================================================
 
@@ -80,6 +106,9 @@ class S3SyncModel extends Model
     public static function createFromRecord(S3SyncRecord $record)
     {
         $model                 = new self();
+        $model->event          = $record->event;
+        $model->message        = $record->message;
+        $model->status         = $record->status;
         $model->volumeId       = $record->volumeId;
         $model->volumeFolderId = $record->volumeFolderId;
         $model->data           = unserialize($record->data);
@@ -87,6 +116,14 @@ class S3SyncModel extends Model
         $model->dateCreated    = $record->dateCreated;
 
         return $model;
+    }
+
+    public function getEventLabel()
+    {
+        $class = implode(' ', ['s3-sync-label', 's3-sync-label--' . $this->status]);
+        $event = self::EVENTS[ $this->event ];
+
+        return Template::raw('<span class="' . $class . '">' . $event . '</span>');
     }
 
     public function getVolume()
@@ -102,6 +139,11 @@ class S3SyncModel extends Model
     public function getEventName()
     {
         return $this->data['eventName'] ?? null;
+    }
+
+    public function getTopicArn()
+    {
+        return $this->data['TopicArn'] ?? null;
     }
 
     public function getBucketName()
@@ -172,5 +214,19 @@ class S3SyncModel extends Model
     public function rules()
     {
         return [];
+    }
+
+    public function setMessage($message = null, $variables = [])
+    {
+        $this->message = Craft::t('s3-sync', $message, $variables);
+
+        return $this;
+    }
+
+    public function setErrorStatus()
+    {
+        $this->status = self::STATUS_ERROR;
+
+        return $this;
     }
 }

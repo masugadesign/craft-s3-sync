@@ -21,6 +21,9 @@ use craft\db\ActiveRecord;
  * @package   S3Sync
  * @since     1.0.0
  *
+ * @property string    $message
+ * @property string    $event
+ * @property string    $status
  * @property int       $siteId
  * @property int       $volumeId
  * @property int       $volumeFolderId

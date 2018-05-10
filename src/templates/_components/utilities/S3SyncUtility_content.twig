@@ -19,20 +19,27 @@
     <table class="table data fullwidth">
         <thead>
         <tr>
-            <th>Path</th>
-            <th>Bucket name</th>
-            <th>Volume</th>
+            <th>Event</th>
+            <th>Message</th>
             <th>Date</th>
         </tr>
         </thead>
         <tbody>
-        {% for event in logs %}
-            {% set volume = event.getVolume() %}
+        {% for log in logs %}
+            {% set volume = log.getVolume() %}
             <tr>
-                <td>{{event.getObjectKey() }}</td>
-                <td>{{event.getBucketName() }}</td>
-                <td scope="row" data-title="{{ 'Volume Name'|t('app') }}"><a href="{{ url('settings/assets/volumes/' ~ volume.id) }}">{{ volume.name|t('site') }}</a></td>
-                <td>{{event.dateCreated }}</td>
+                <td>{{log.getEventLabel() }}</td>
+                <td scope="row" data-title="{{ 'Message'|t('app') }}">
+                    {% if log.event == 'create-asset' and log.status == 'success' %}
+                        {{log.message }}
+                        {%- if volume %}
+                            in <a href="{{ url('settings/assets/volumes/' ~ volume.id) }}">{{ volume.name|t('site') }}</a>
+                        {% endif %}
+                    {% else %}
+                        {{log.message }}
+                    {% endif %}
+                </td>
+                <td scope="row" data-title="{{ 'Log Date'|t('app') }}">{{log.dateCreated }}</td>
             </tr>
         {% endfor %}
         </tbody>

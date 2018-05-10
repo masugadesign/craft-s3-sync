@@ -46,9 +46,11 @@ class DefaultController extends Controller
     public function actionIndex()
     {
         $this->enableCsrfValidation = false;
-        $parser                     = new JsonParser();
-        $body                       = $parser->parse(Craft::$app->getRequest()->getRawBody(), 'application/json');
         $request                    = Craft::$app->getRequest();
+        $parser                     = new JsonParser();
+        $body                       = $parser->parse($request->getRawBody(), 'application/json');
+
+        Craft::info('S3 SNS payload: ' . $request->getRawBody(), __METHOD__);
 
         if ($type = $request->getHeaders()->get('x-amz-sns-message-type')) {
             if (in_array($type, ['SubscriptionConfirmation', 'UnsubscribeConfirmation'])) {
@@ -56,6 +58,10 @@ class DefaultController extends Controller
                     'success' => S3Sync::$plugin->s3SyncService->confirmSubscription($body),
                 ]);
             }
+        }
+
+        if (empty($body['Message'])) {
+            throw new HttpException(400);
         }
 
         $body = $parser->parse($body['Message'], 'application/json');

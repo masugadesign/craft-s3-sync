@@ -50,13 +50,24 @@ class S3SyncService extends Component
 
     public function confirmSubscription($body = [])
     {
-        $url = $body['SubscribeURL'];
+        $log        = S3SyncModel::create($body);
+        $log->event = S3SyncModel::EVENT_CONFIRMATION;
 
         try {
+            $url = $body['SubscribeURL'];
+            $log->setMessage('Confirmed subscription for {arn}', ['arn' => $log->getTopicArn()]);
+
             $client = new Client();
             $client->get($url);
 
+            $this->_saveRecord($log);
+
         } catch (RequestException $e) {
+            $log
+                ->setErrorStatus()
+                ->setMessage('{error}', ['error' => $e->getMessage()]);
+
+            $this->_saveRecord($log);
 
             Craft::error(
                 Craft::t(
@@ -67,7 +78,14 @@ class S3SyncService extends Component
                     ]
                 ), __METHOD__);
 
+
             return false;
+        } catch (\Exception $e) {
+            $log
+                ->setErrorStatus()
+                ->setMessage('{error}', ['error' => $e->getMessage()]);
+
+            $this->_saveRecord($log);
         }
 
         return true;
@@ -75,9 +93,10 @@ class S3SyncService extends Component
 
     public function processEvent(S3SyncModel $model)
     {
-        $assets   = Craft::$app->getAssets();
-        $filename = $model->getFilename();
-        $volume   = $this->getMatchingVolume($model->getBucketName());
+        $model->event = S3SyncModel::EVENT_CREATE_ASSET;
+        $assets       = Craft::$app->getAssets();
+        $filename     = $model->getFilename();
+        $volume       = $this->getMatchingVolume($model->getBucketName());
 
         if (!$volume) {
             return false;
@@ -87,14 +106,23 @@ class S3SyncService extends Component
             $asset                 = Craft::$app->getAssetIndexer()->indexFile($volume, $model->getObjectKey());
             $model->volumeFolderId = $asset->getFolder()->id;
             $model->volumeId       = $volume->id;
+            $model->setMessage('Created {path}', ['path' => $model->getObjectKey()]);
 
             $this->_saveRecord($model);
         } catch (AssetDisallowedExtensionException $e) {
-            echo $e->getMessage();
+            $model
+                ->setErrorStatus()
+                ->setMessage($e->getMessage());
+
+            $this->_saveRecord($model);
 
             return false;
         } catch (\Exception $e) {
-            echo $e->getMessage();
+            $model
+                ->setErrorStatus()
+                ->setMessage($e->getMessage());
+
+            $this->_saveRecord($model);
 
             return false;
         }
@@ -145,6 +173,9 @@ class S3SyncService extends Component
                 $record = new S3SyncRecord();
             }
 
+            $record->event          = $model->event;
+            $record->status         = $model->status;
+            $record->message        = $model->message;
             $record->volumeId       = $model->volumeId;
             $record->volumeFolderId = $model->volumeFolderId;
             $record->siteId         = Craft::$app->getSites()->getPrimarySite()->id;

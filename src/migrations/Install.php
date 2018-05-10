@@ -88,8 +88,11 @@ class Install extends Migration
                     'dateUpdated'    => $this->dateTime()->notNull(),
                     'uid'            => $this->uid(),
                     'siteId'         => $this->integer()->notNull(),
-                    'volumeId'       => $this->integer()->notNull(),
-                    'volumeFolderId' => $this->integer()->notNull(),
+                    'status'         => $this->enum('status', ['success', 'error'])->defaultValue('success'),
+                    'message'        => $this->text(),
+                    'event'          => $this->enum('event', ['notification', 'confirmation', 'create-asset'])->defaultValue('create-asset'),
+                    'volumeId'       => $this->integer()->null()->defaultValue(null),
+                    'volumeFolderId' => $this->integer()->null()->defaultValue(null),
                     'data'           => $this->text()->null()->defaultValue(null),
                 ]
             );
