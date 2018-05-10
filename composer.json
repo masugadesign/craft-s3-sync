@@ -1,5 +1,5 @@
 {
-    "name": "superbig/craft-s3-sync",
+    "name": "masugadesign/craft-s3-sync",
     "description": "Create Assets in Craft when a file is uploaded directly to S3",
     "type": "craft-plugin",
     "version": "1.0.0",
@@ -11,8 +11,8 @@
         "s3 sync"
     ],
     "support": {
-        "docs": "https://github.com/superbigco/craft-s3-sync/blob/master/README.md",
-        "issues": "https://github.com/superbigco/craft-s3-sync/issues"
+        "docs": "https://github.com/masugadesign/craft-s3-sync/blob/master/README.md",
+        "issues": "https://github.com/masugadesign/craft-s3-sync/issues"
     },
     "license": "MIT",
     "authors": [
@@ -26,7 +26,7 @@
     },
     "autoload": {
         "psr-4": {
-          "superbig\\s3sync\\": "src/"
+          "masugadesign\\s3sync\\": "src/"
         }
     },
     "extra": {
@@ -34,10 +34,10 @@
         "handle": "s3-sync",
         "hasCpSettings": false,
         "hasCpSection": false,
-        "changelogUrl": "https://raw.githubusercontent.com/superbigco/craft-s3-sync/master/CHANGELOG.md",
+        "changelogUrl": "https://raw.githubusercontent.com/masugadesign/craft-s3-sync/master/CHANGELOG.md",
         "components": {
-            "s3SyncService": "superbig\\s3sync\\services\\S3SyncService"
+            "s3SyncService": "masugadesign\\s3sync\\services\\S3SyncService"
         },
-        "class": "superbig\\s3sync\\S3Sync"
+        "class": "masugadesign\\s3sync\\S3Sync"
     }
 }
