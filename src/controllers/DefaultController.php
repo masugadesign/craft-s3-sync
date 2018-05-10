@@ -53,7 +53,7 @@ class DefaultController extends Controller
         Craft::info('S3 SNS payload: ' . $request->getRawBody(), __METHOD__);
 
         if ($type = $request->getHeaders()->get('x-amz-sns-message-type')) {
-            if (in_array($type, ['SubscriptionConfirmation', 'UnsubscribeConfirmation'])) {
+            if (in_array($type, ['SubscriptionConfirmation'])) {
                 return $this->asJson([
                     'success' => S3Sync::$plugin->s3SyncService->confirmSubscription($body),
                 ]);
