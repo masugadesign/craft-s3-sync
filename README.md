@@ -18,7 +18,7 @@ To install the plugin, follow these instructions.
 
 2. Then tell Composer to load the plugin:
 
-        composer require sjelfull/craft-s3-sync
+        composer require masugadesign/craft-s3-sync
 
 3. In the Control Panel, go to Settings → Plugins and click the “Install” button for S3 Sync.
 
@@ -32,6 +32,8 @@ No configuration necessary.
 
 ## Using S3 Sync
 
--Insert text here-
+Upload files to S3. That's about it.
 
-Brought to you by [Superbig](https://superbig.co)
+Originally coded up by Fred @ [Superbig](https://superbig.co)
+
+_NOTE: You should not install this. We will not support it in any way, shape, or form._
