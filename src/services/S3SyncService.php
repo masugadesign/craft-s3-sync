@@ -155,6 +155,10 @@ class S3SyncService extends Component
 
     public function getLogs()
     {
+        // Delete old records
+        $date = (new \DateTime())->modify('-14 days')->format('Y-m-d H:i:s');
+        S3SyncRecord::deleteAll(['<', 'dateCreated', $date]);
+
         $records = S3SyncRecord::find()
                                ->with(['volume'])
                                ->orderBy('dateCreated DESC')
