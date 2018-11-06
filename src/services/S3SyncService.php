@@ -4,27 +4,27 @@
  *
  * Create Assets in Craft when a file is uploaded directly to S3
  *
- * @link      https://superbig.co
- * @copyright Copyright (c) 2018 Superbig
+ * @link      https://gomasuga.com
+ * @copyright Copyright (c) 2018 Masuga Design
  */
 
-namespace superbig\s3sync\services;
+namespace masugadesign\s3sync\services;
 
 use craft\base\FlysystemVolume;
 use craft\elements\Asset;
 use craft\errors\AssetDisallowedExtensionException;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\RequestException;
-use superbig\s3sync\models\S3SyncModel;
-use superbig\s3sync\records\S3SyncRecord;
-use superbig\s3sync\S3Sync;
+use masugadesign\s3sync\models\S3SyncModel;
+use masugadesign\s3sync\records\S3SyncRecord;
+use masugadesign\s3sync\S3Sync;
 
 use Craft;
 use craft\base\Component;
 use craft\helpers\Assets as AssetsHelper;
 
 /**
- * @author    Superbig
+ * @author    Masuga Design
  * @package   S3Sync
  * @since     1.0.0
  */
