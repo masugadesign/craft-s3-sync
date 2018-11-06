@@ -4,27 +4,27 @@
  *
  * Create Assets in Craft when a file is uploaded directly to S3
  *
- * @link      https://gomasuga.com
- * @copyright Copyright (c) 2018 Masuga Design
+ * @link      https://superbig.co
+ * @copyright Copyright (c) 2018 Superbig
  */
 
-namespace masugadesign\s3sync\services;
+namespace superbig\s3sync\services;
 
 use craft\base\FlysystemVolume;
 use craft\elements\Asset;
 use craft\errors\AssetDisallowedExtensionException;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\RequestException;
-use masugadesign\s3sync\models\S3SyncModel;
-use masugadesign\s3sync\records\S3SyncRecord;
-use masugadesign\s3sync\S3Sync;
+use superbig\s3sync\models\S3SyncModel;
+use superbig\s3sync\records\S3SyncRecord;
+use superbig\s3sync\S3Sync;
 
 use Craft;
 use craft\base\Component;
 use craft\helpers\Assets as AssetsHelper;
 
 /**
- * @author    Masuga Design
+ * @author    Superbig
  * @package   S3Sync
  * @since     1.0.0
  */
@@ -96,7 +96,7 @@ class S3SyncService extends Component
         $model->event = S3SyncModel::EVENT_CREATE_ASSET;
         $assets       = Craft::$app->getAssets();
         $filename     = $model->getFilename();
-        $volume       = $this->getMatchingVolume($model->getBucketName());
+        $volume       = $this->getMatchingVolume($model->getBucketName(), $model->getObjectKey());
 
         if (!$volume) {
             return false;
@@ -137,17 +137,26 @@ class S3SyncService extends Component
         return true;
     }
 
-    /*
+    /**
+     * @param string $bucketName
+     * @param string $objectKey
+     *
      * @return FlysystemVolume|null
      */
-    public function getMatchingVolume($bucketName = '')
+    public function getMatchingVolume($bucketName = '', $objectKey = '')
     {
-        $volumes = array_filter(Craft::$app->getVolumes()->getAllVolumes(), function(
-            /** @var FlysystemVolume */
-            $volume) use ($bucketName) {
+        $volumes = array_filter(Craft::$app->getVolumes()->getAllVolumes(), function($volume) use ($objectKey, $bucketName) {
+            /** @var $volume FlysystemVolume */
+            $matchesSubfolder = true;
             $volumeBucketName = $volume->getSettings()['bucket'] ?? false;
+            $matchesBucket    = $bucketName === $volumeBucketName;
 
-            return $bucketName === $volumeBucketName;
+            if (!empty($volume->getSettings()['subfolder'])) {
+                $subfolder        = rtrim($volume->getSettings()['subfolder'], '/');
+                $matchesSubfolder = stripos($objectKey, $subfolder, 0) !== false;
+            }
+
+            return $matchesBucket && $matchesSubfolder;
         });
 
         return end($volumes) ?? null;
