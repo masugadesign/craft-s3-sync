@@ -36,7 +36,8 @@ class S3SyncService extends Component
     public function process($events = [])
     {
         $events = array_filter($events, function($event) {
-            return $event['eventName'] === S3SyncModel::EVENT_CREATED_PUT;
+            return $event['eventName'] === S3SyncModel::EVENT_CREATED_PUT ||
+                $event['eventName'] === S3SyncModel::EVENT_CREATED_MPU;
         });
 
         array_map(function($event) {

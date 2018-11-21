@@ -29,6 +29,7 @@ class S3SyncModel extends Model
     const STATUS_ERROR       = 'error';
     const EVENT_CREATED      = 'ObjectCreated:*';
     const EVENT_CREATED_PUT  = 'ObjectCreated:Put';
+    const EVENT_CREATED_MPU  = 'ObjectCreated:CompleteMultipartUpload';
     const EVENT_CONFIRMATION = 'confirmation';
     const EVENT_CREATE_ASSET = 'create-asset';
     const EVENT_NOTIFICATION = 'notification';
