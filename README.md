@@ -1,5 +1,7 @@
 # S3 Sync plugin for Craft CMS 3.x
 
+## :warning: NOTE: You should not install this. We will not support it in any way, shape, or form.
+
 Create Assets in Craft when a file is uploaded directly to S3
 
 ![Icon](resources/img/icon.png)
@@ -35,5 +37,3 @@ No configuration necessary.
 Upload files to S3. That's about it.
 
 Originally coded up by Fred @ [Superbig](https://superbig.co)
-
-_NOTE: You should not install this. We will not support it in any way, shape, or form._
